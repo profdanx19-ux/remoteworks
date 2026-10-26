@@ -351,6 +351,10 @@ form .btn,
   border: 0;
 }
 
+.form-frame-done {
+  height: 720px;
+}
+
 .assessment input:not([type="radio"]),
 .assessment textarea {
   width: 100%;

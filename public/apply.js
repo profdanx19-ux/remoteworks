@@ -13,6 +13,17 @@ const unknown = document.querySelector("#unknown");
 const apply = document.querySelector("#apply");
 const frame = document.querySelector("#application-form");
 
+let formReady = false;
+frame.addEventListener("load", () => {
+  if (!formReady) {
+    formReady = true;
+    return;
+  }
+  frame.classList.add("form-frame-done");
+  const top = apply.getBoundingClientRect().top + window.scrollY;
+  window.scrollTo({ top, behavior: "instant" });
+});
+
 if (!roleName) {
   unknown.hidden = false;
 } else {
