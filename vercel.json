@@ -1,0 +1,10 @@
+{
+  "functions": {
+    "server.js": {
+      "includeFiles": "public/**"
+    }
+  },
+  "rewrites": [
+    { "source": "/apply", "destination": "/apply.html" }
+  ]
+}

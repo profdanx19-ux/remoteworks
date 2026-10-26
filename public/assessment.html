@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Skills Assessment</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="exam-body">
+    <div class="exam-wrap">
+      <section id="invalid" hidden>
+        <h1>This assessment link is not valid.</h1>
+        <p class="exam-copy">Use the assessment link sent to you by email.</p>
+      </section>
+
+      <section id="exam" hidden>
+        <header class="exam-top">
+          <h1 id="exam-title">Skills Assessment</h1>
+          <p class="exam-timer" id="timer" aria-label="Time remaining">15:00</p>
+        </header>
+
+        <div class="exam-progress">
+          <p id="progress-label">Question 1 of 12</p>
+          <div class="progress-track" aria-hidden="true">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+        </div>
+
+        <form id="exam-form">
+          <div id="question"></div>
+          <div class="exam-nav">
+            <button type="button" class="btn secondary" id="prev">Previous</button>
+            <button type="button" class="btn" id="next">Next</button>
+            <button type="submit" class="btn" id="submit" disabled>Submit Assessment</button>
+          </div>
+          <p class="field-error" id="save-error" role="alert" hidden>
+            Your answers could not be saved. Please submit again.
+          </p>
+        </form>
+      </section>
+
+      <section id="results" hidden>
+        <h1>Assessment Complete</h1>
+        <p class="exam-copy" id="results-copy"></p>
+      </section>
+    </div>
+    <script src="assessment.js"></script>
+  </body>
+</html>

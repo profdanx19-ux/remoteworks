@@ -1,10 +1,11 @@
 const express = require("express");
-const site = require("./site.config.js");
+const site = require("./public/site.config.js");
 const fs = require("fs");
 const path = require("path");
 
 const app = express();
 const port = Number(process.env.PORT) || 8765;
+const publicDir = path.join(__dirname, "public");
 const dataFile = path.join(__dirname, "data", "records.json");
 
 app.use(express.json({ limit: "100kb" }));
@@ -30,11 +31,15 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/apply", (req, res) => {
-  res.sendFile(path.join(__dirname, "apply.html"));
+app.get("/", (req, res) => {
+  res.sendFile(path.join(publicDir, "index.html"));
 });
 
-app.use(express.static(__dirname));
+app.get("/apply", (req, res) => {
+  res.sendFile(path.join(publicDir, "apply.html"));
+});
+
+app.use(express.static(publicDir));
 
 function readRecords() {
   try {
@@ -149,11 +154,15 @@ app.post("/api/assessments", (req, res) => {
   res.status(201).json({ ok: true, score: result.score, total: result.total });
 });
 
-app.listen(port, () => {
-  const base = `http://127.0.0.1:${port}`;
-  console.log(`${site.name} running at ${base}`);
-  console.log("Email these assessment links after you review an application:");
-  console.log(`  Data Entry Specialist: ${base}/assessment.html?job=data`);
-  console.log(`  Transcriptionist: ${base}/assessment.html?job=transcription`);
-  console.log(`  Virtual Assistant: ${base}/assessment.html?job=assistant`);
-});
+module.exports = app;
+
+if (process.env.VERCEL !== "1") {
+  app.listen(port, () => {
+    const base = `http://127.0.0.1:${port}`;
+    console.log(`${site.name} running at ${base}`);
+    console.log("Email these assessment links after you review an application:");
+    console.log(`  Data Entry Specialist: ${base}/assessment.html?job=data`);
+    console.log(`  Transcriptionist: ${base}/assessment.html?job=transcription`);
+    console.log(`  Virtual Assistant: ${base}/assessment.html?job=assistant`);
+  });
+}
