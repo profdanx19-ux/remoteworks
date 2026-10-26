@@ -4,9 +4,12 @@ const duration = 15 * 60;
 const storageKey = `rsh-assessment-${job}`;
 
 const invalid = document.querySelector("#invalid");
+const intro = document.querySelector("#intro");
+const introTitle = document.querySelector("#intro-title");
+const introCopy = document.querySelector("#intro-copy");
+const startButton = document.querySelector("#start-assessment");
 const exam = document.querySelector("#exam");
 const results = document.querySelector("#results");
-const resultsCopy = document.querySelector("#results-copy");
 const title = document.querySelector("#exam-title");
 const timer = document.querySelector("#timer");
 const progressLabel = document.querySelector("#progress-label");
@@ -64,14 +67,15 @@ function complete() {
   return questions.every(answered);
 }
 
-function showResults(score, total) {
+function showResults() {
   submitted = true;
   window.clearInterval(clock);
+  intro.hidden = true;
   exam.hidden = true;
   invalid.hidden = true;
   results.hidden = false;
-  document.title = "Assessment Complete";
-  resultsCopy.textContent = `Assessment Complete — You scored ${score}/${total}. Congratulations, you've passed. Your application has been forwarded to the hiring team. You'll receive next steps within 24 hours.`;
+  document.title = "Assessment received";
+  window.scrollTo({ top: 0, behavior: "instant" });
 }
 
 function escapeHtml(value) {
@@ -156,15 +160,41 @@ async function submitExam(fromTimer) {
     if (!response.ok) throw new Error("save failed");
     const data = await response.json();
     saveState({ done: true, score: data.score, total: data.total });
-    showResults(data.score, data.total);
+    showResults();
   } catch {
     submitted = false;
     saveError.hidden = false;
+    saveError.scrollIntoView({ block: "center" });
     submitButton.hidden = false;
     nextButton.hidden = true;
     submitButton.disabled = fromTimer ? false : !complete();
     if (remaining > 0) clock = window.setInterval(tick, 1000);
   }
+}
+
+function beginExam() {
+  if (clock || submitted) return;
+  startButton.disabled = true;
+  intro.hidden = true;
+  exam.hidden = false;
+  startedAt = Date.now();
+  saveState({ started: true });
+  render();
+  tick();
+  if (remaining <= 0) return;
+  clock = window.setInterval(tick, 1000);
+}
+
+function resumeExam(saved) {
+  intro.hidden = true;
+  exam.hidden = false;
+  startedAt = saved.startedAt || Date.now();
+  index = Math.min(saved.index || 0, questions.length - 1);
+  answers = saved.answers || {};
+  render();
+  tick();
+  if (remaining <= 0) return;
+  clock = window.setInterval(tick, 1000);
 }
 
 async function start() {
@@ -175,7 +205,7 @@ async function start() {
 
   const saved = loadState();
   if (saved?.done) {
-    showResults(saved.score, saved.total || 12);
+    showResults();
     return;
   }
 
@@ -190,23 +220,21 @@ async function start() {
   }
 
   questions = payload.questions;
-  title.textContent = `Skills Assessment — ${payload.role}`;
-  document.title = `Skills Assessment — ${payload.role}`;
-  if (saved) {
-    startedAt = saved.startedAt || Date.now();
-    index = Math.min(saved.index || 0, questions.length - 1);
-    answers = saved.answers || {};
-  } else {
-    startedAt = Date.now();
-    saveState();
+  const heading = `Skills Assessment — ${payload.role}`;
+  introTitle.textContent = heading;
+  title.textContent = heading;
+  document.title = heading;
+  introCopy.textContent = `This is the skills assessment for the ${payload.role} role. Read the instructions, then start when you are ready.`;
+
+  if (saved?.started) {
+    resumeExam(saved);
+    return;
   }
 
-  exam.hidden = false;
-  render();
-  tick();
-  if (remaining <= 0) return;
-  clock = window.setInterval(tick, 1000);
+  intro.hidden = false;
 }
+
+startButton.addEventListener("click", beginExam);
 
 prevButton.addEventListener("click", () => {
   if (index === 0) return;

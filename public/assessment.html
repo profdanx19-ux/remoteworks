@@ -14,6 +14,17 @@
         <p class="exam-copy">Use the assessment link sent to you by email.</p>
       </section>
 
+      <section id="intro" hidden>
+        <h1 id="intro-title">Skills Assessment</h1>
+        <p class="exam-copy" id="intro-copy"></p>
+        <ul class="exam-notes">
+          <li>There are 12 questions: 10 multiple choice and 2 short written answers.</li>
+          <li>You have 15 minutes. The timer starts when you press Start.</li>
+          <li>Answer every question. You can move back to earlier questions before you submit.</li>
+        </ul>
+        <button type="button" class="btn" id="start-assessment">Start assessment</button>
+      </section>
+
       <section id="exam" hidden>
         <header class="exam-top">
           <h1 id="exam-title">Skills Assessment</h1>
@@ -41,8 +52,20 @@
       </section>
 
       <section id="results" hidden>
-        <h1>Assessment Complete</h1>
-        <p class="exam-copy" id="results-copy"></p>
+        <div class="received-mark" aria-hidden="true">
+          <svg viewBox="0 0 120 120" width="120" height="120">
+            <circle cx="60" cy="60" r="56" fill="#eff6ff"/>
+            <path d="M28 62 60 36l32 26" fill="none" stroke="#2563eb" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M38 58v28h44V58" fill="#fff" stroke="#2563eb" stroke-width="6" stroke-linejoin="round"/>
+            <path d="M52 86v-12a8 8 0 0 1 16 0v12" fill="none" stroke="#2563eb" stroke-width="6" stroke-linecap="round"/>
+            <circle cx="88" cy="34" r="14" fill="#2563eb"/>
+            <path d="M81.5 34.2 86 38.6 95 29.5" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h1>Assessment received</h1>
+        <p class="exam-copy" id="results-copy">
+          Thank you. We have your assessment and will email you within 24 hours.
+        </p>
       </section>
     </div>
     <script src="assessment.js"></script>

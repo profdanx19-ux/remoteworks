@@ -125,7 +125,7 @@ app.get("/api/assessments/:job", (req, res) => {
   res.json(bank);
 });
 
-app.post("/api/assessments", (req, res) => {
+app.post("/api/assessments", async (req, res) => {
   const job = text(req.body?.job, 40);
   const answers = req.body?.answers;
   const result = grade(job, answers);
@@ -140,19 +140,42 @@ app.post("/api/assessments", (req, res) => {
     cleaned[text(key, 10)] = text(value, 2000);
   });
 
-  const records = readRecords();
-  records.assessments.push({
-    id: `${Date.now().toString(36)}-${records.assessments.length + 1}`,
+  const record = {
+    id: `${Date.now().toString(36)}-${readRecords().assessments.length + 1}`,
     job,
     role: roles[job].name,
     answers: cleaned,
     score: result.score,
     total: result.total,
     submittedAt: new Date().toISOString(),
-  });
-  writeRecords(records);
+  };
+
+  try {
+    await saveAssessment(record);
+  } catch {
+    res.status(500).json({ error: "The assessment could not be saved." });
+    return;
+  }
+
   res.status(201).json({ ok: true, score: result.score, total: result.total });
 });
+
+async function saveAssessment(record) {
+  const webhook = process.env.ASSESSMENT_WEBHOOK || site.assessmentWebhook;
+  if (webhook) {
+    const response = await fetch(webhook, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(record),
+    });
+    if (!response.ok) throw new Error("The assessment sheet did not accept the answers.");
+    return;
+  }
+
+  const records = readRecords();
+  records.assessments.push(record);
+  writeRecords(records);
+}
 
 module.exports = app;
 

@@ -818,6 +818,29 @@ textarea[aria-invalid="true"] {
   font-size: 1.05rem;
 }
 
+.exam-notes {
+  margin: 1.25rem 0 0;
+  padding-left: 1.2rem;
+  color: var(--text);
+}
+
+.exam-notes li + li {
+  margin-top: 0.45rem;
+}
+
+#intro .btn {
+  margin-top: 1.5rem;
+}
+
+#results {
+  text-align: center;
+}
+
+#results .exam-copy {
+  margin-inline: auto;
+  max-width: 36rem;
+}
+
 @media (max-width: 640px) {
   .exam-nav {
     flex-direction: column;
