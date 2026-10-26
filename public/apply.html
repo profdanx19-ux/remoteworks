@@ -4,12 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Apply · RemoteStaff Hub</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body data-title="Apply · {name}">
     <header class="site-header">
       <div class="wrap header-inner">
-        <a class="brand" href="index.html" data-site-name="{name}">RemoteStaff Hub</a>
+        <a class="brand" href="index.html">
+          <img src="/favicon.svg" alt="" width="28" height="28" />
+          <span data-site-name="{name}">RemoteStaff Hub</span>
+        </a>
       </div>
     </header>
 
@@ -23,14 +27,35 @@
         </section>
 
         <section id="apply" hidden>
-          <p class="eyebrow" id="role-label"></p>
-          <h1>Apply for this role</h1>
-          <iframe
-            id="application-form"
-            class="form-frame"
-            title="Application form"
-            loading="lazy"
-          ></iframe>
+          <div id="apply-form-view">
+            <p class="eyebrow" id="role-label"></p>
+            <h1>Apply for this role</h1>
+            <iframe
+              id="application-form"
+              class="form-frame"
+              title="Application form"
+              loading="lazy"
+            ></iframe>
+          </div>
+
+          <div id="received" hidden>
+            <div class="received-mark" aria-hidden="true">
+              <svg viewBox="0 0 120 120" width="120" height="120">
+                <circle cx="60" cy="60" r="56" fill="#eff6ff"/>
+                <path d="M28 62 60 36l32 26" fill="none" stroke="#2563eb" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M38 58v28h44V58" fill="#fff" stroke="#2563eb" stroke-width="6" stroke-linejoin="round"/>
+                <path d="M52 86v-12a8 8 0 0 1 16 0v12" fill="none" stroke="#2563eb" stroke-width="6" stroke-linecap="round"/>
+                <circle cx="88" cy="34" r="14" fill="#2563eb"/>
+                <path d="M81.5 34.2 86 38.6 95 29.5" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h1>Application received</h1>
+            <p class="lede">
+              Thank you. We'll review your application and email your skills
+              assessment link within 24 hours.
+            </p>
+            <a class="btn" href="/">Back to jobs</a>
+          </div>
         </section>
       </div>
     </main>

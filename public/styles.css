@@ -49,10 +49,19 @@ body {
 }
 
 .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
   color: var(--text);
   font-weight: 700;
   text-decoration: none;
   letter-spacing: -0.02em;
+}
+
+.brand img {
+  display: block;
+  width: 28px;
+  height: 28px;
 }
 
 .hero {
@@ -353,6 +362,22 @@ form .btn,
 
 .form-frame-done {
   height: 720px;
+}
+
+#received {
+  text-align: center;
+}
+
+#received .lede {
+  margin-inline: auto;
+}
+
+.received-mark {
+  margin: 0.5rem 0 1.25rem;
+}
+
+#received .btn {
+  margin-top: 1.25rem;
 }
 
 .assessment input:not([type="radio"]),

@@ -20,8 +20,10 @@ frame.addEventListener("load", () => {
     return;
   }
   frame.classList.add("form-frame-done");
-  const top = apply.getBoundingClientRect().top + window.scrollY;
-  window.scrollTo({ top, behavior: "instant" });
+  document.querySelector("#apply-form-view").hidden = true;
+  document.querySelector("#received").hidden = false;
+  document.title = `Application received · ${window.siteConfig.name}`;
+  window.scrollTo({ top: 0, behavior: "instant" });
 });
 
 if (!roleName) {
