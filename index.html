@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RemoteStaff Hub</title>
+    <meta
+      name="description"
+      data-template="Browse remote roles at {name} and send a short application."
+      content="Browse remote roles at RemoteStaff Hub and send a short application."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-title="{name}">
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a class="brand" href="/" data-site-name="{name}">RemoteStaff Hub</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="wrap">
+          <h1>Remote roles, hiring now.</h1>
+          <p class="lede">
+            Browse open positions below. Most roles require no prior experience.
+          </p>
+          <a class="btn" href="#jobs">View Open Roles</a>
+        </div>
+      </section>
+
+      <section class="jobs" id="jobs" aria-labelledby="jobs-heading">
+        <div class="wrap">
+          <h2 id="jobs-heading">Currently Hiring — Remote</h2>
+          <ul class="job-list">
+            <li class="job-card">
+              <h3>Data Entry Specialist</h3>
+              <p class="job-pay">$18–$22/hr</p>
+              <div class="job-facts">
+                <p class="job-meta">Remote — US/UK</p>
+                <p class="job-meta">No experience required</p>
+              </div>
+              <p>Enter and check records from source documents.</p>
+              <a class="btn" href="/apply?role=data">Apply Now</a>
+            </li>
+            <li class="job-card">
+              <h3>Transcriptionist</h3>
+              <p class="job-pay">$18–$22/hr</p>
+              <div class="job-facts">
+                <p class="job-meta">Remote — US/UK</p>
+                <p class="job-meta">No experience required</p>
+              </div>
+              <p>Turn audio and video into a clear written transcript.</p>
+              <a class="btn" href="/apply?role=transcription">Apply Now</a>
+            </li>
+            <li class="job-card">
+              <h3>Virtual Assistant</h3>
+              <p class="job-pay">$20–$25/hr</p>
+              <div class="job-facts">
+                <p class="job-meta">Remote — US/UK</p>
+                <p class="job-meta">No experience required</p>
+              </div>
+              <p>Handle email, scheduling, and everyday admin tasks.</p>
+              <a class="btn" href="/apply?role=assistant">Apply Now</a>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="steps" aria-labelledby="steps-heading">
+        <div class="wrap">
+          <h2 id="steps-heading">How It Works</h2>
+          <ol class="step-list">
+            <li>
+              <h3>Apply</h3>
+              <p>Submit your application for any open role.</p>
+            </li>
+            <li>
+              <h3>Get Assessed</h3>
+              <p>Complete a short skills assessment if selected.</p>
+            </li>
+            <li>
+              <h3>Start Working</h3>
+              <p>Begin your remote role after onboarding.</p>
+            </li>
+          </ol>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <p>
+          <a href="mailto:support@remotestaffhub.xyz">support@remotestaffhub.xyz</a>
+        </p>
+        <p>WeWork, 1460 Broadway, New York, NY 10036</p>
+        <p data-site-name="© 2026 {name}. All rights reserved.">
+          © 2026 RemoteStaff Hub. All rights reserved.
+        </p>
+      </div>
+    </footer>
+
+    <script src="site.config.js"></script>
+    <script src="site.js"></script>
+  </body>
+</html>
