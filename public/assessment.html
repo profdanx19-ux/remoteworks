@@ -19,16 +19,24 @@
         <p class="exam-copy" id="intro-copy"></p>
         <ul class="exam-notes">
           <li>There are 12 questions: 10 multiple choice and 2 short written answers.</li>
-          <li>You have 15 minutes. The timer starts when you press Start.</li>
+          <li>You have 20 minutes. The timer starts when you press Start.</li>
+          <li>Each email address can submit this assessment once.</li>
           <li>Answer every question. You can move back to earlier questions before you submit.</li>
         </ul>
+        <label class="exam-email" for="applicant-email">
+          Email used on your application
+          <input id="applicant-email" type="email" autocomplete="email" maxlength="120" required />
+        </label>
+        <p class="field-error" id="email-error" role="alert" hidden>
+          Enter the email address from your application.
+        </p>
         <button type="button" class="btn" id="start-assessment">Start assessment</button>
       </section>
 
       <section id="exam" hidden>
         <header class="exam-top">
           <h1 id="exam-title">Skills Assessment</h1>
-          <p class="exam-timer" id="timer" aria-label="Time remaining">15:00</p>
+          <p class="exam-timer" id="timer" aria-label="Time remaining">20:00</p>
         </header>
 
         <div class="exam-progress">
@@ -49,6 +57,14 @@
             Your answers could not be saved. Please submit again.
           </p>
         </form>
+      </section>
+
+      <section id="already" hidden>
+        <h1>Assessment already submitted</h1>
+        <p class="exam-copy">
+          This email has already been used for this assessment. Each person can submit once.
+          We will email you within 24 hours.
+        </p>
       </section>
 
       <section id="results" hidden>

@@ -258,6 +258,11 @@ a:focus-visible {
   color: var(--muted);
 }
 
+.steps-note {
+  margin: 1.25rem 0 0;
+  color: var(--muted);
+}
+
 .apply-dialog {
   width: min(440px, calc(100% - 2rem));
   margin: auto;
@@ -828,15 +833,22 @@ textarea[aria-invalid="true"] {
   margin-top: 0.45rem;
 }
 
-#intro .btn {
-  margin-top: 1.5rem;
+#intro .exam-email {
+  max-width: 28rem;
+  margin-top: 1.25rem;
 }
 
-#results {
+#intro .btn {
+  margin-top: 0.5rem;
+}
+
+#results,
+#already {
   text-align: center;
 }
 
-#results .exam-copy {
+#results .exam-copy,
+#already .exam-copy {
   margin-inline: auto;
   max-width: 36rem;
 }

@@ -116,6 +116,17 @@ app.post("/api/applications", (req, res) => {
   res.status(201).json({ ok: true });
 });
 
+app.get("/api/assessments/status", async (req, res) => {
+  const email = text(req.query.email, 120).toLowerCase();
+  const jobKey = text(req.query.job, 40);
+  if (!email || !email.includes("@") || !roles[jobKey]) {
+    res.status(400).json({ error: "A valid email and role are required." });
+    return;
+  }
+  const already = await assessmentExists(email, jobKey);
+  res.json({ already });
+});
+
 app.get("/api/assessments/:job", (req, res) => {
   const bank = publicBank(text(req.params.job, 40));
   if (!bank) {
@@ -135,6 +146,17 @@ app.post("/api/assessments", async (req, res) => {
     return;
   }
 
+  const email = text(req.body?.email, 120).toLowerCase();
+  if (!email || !email.includes("@")) {
+    res.status(400).json({ error: "A valid email is required." });
+    return;
+  }
+
+  if (await assessmentExists(email, job)) {
+    res.status(409).json({ duplicate: true });
+    return;
+  }
+
   const cleaned = {};
   Object.entries(answers).forEach(([key, value]) => {
     cleaned[text(key, 10)] = text(value, 2000);
@@ -143,6 +165,7 @@ app.post("/api/assessments", async (req, res) => {
   const record = {
     id: `${Date.now().toString(36)}-${readRecords().assessments.length + 1}`,
     job,
+    email,
     role: roles[job].name,
     answers: cleaned,
     score: result.score,
@@ -152,7 +175,11 @@ app.post("/api/assessments", async (req, res) => {
 
   try {
     await saveAssessment(record);
-  } catch {
+  } catch (error) {
+    if (error.duplicate) {
+      res.status(409).json({ duplicate: true });
+      return;
+    }
     res.status(500).json({ error: "The assessment could not be saved." });
     return;
   }
@@ -168,6 +195,12 @@ async function saveAssessment(record) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(record),
     });
+    const payload = await response.json().catch(() => ({}));
+    if (payload.duplicate) {
+      const error = new Error("duplicate");
+      error.duplicate = true;
+      throw error;
+    }
     if (!response.ok) throw new Error("The assessment sheet did not accept the answers.");
     return;
   }
@@ -175,6 +208,24 @@ async function saveAssessment(record) {
   const records = readRecords();
   records.assessments.push(record);
   writeRecords(records);
+}
+
+async function assessmentExists(email, jobKey) {
+  const local = readRecords().assessments.some(
+    (item) => item.job === jobKey && String(item.email || "").toLowerCase() === email,
+  );
+  if (local) return true;
+
+  const webhook = process.env.ASSESSMENT_WEBHOOK || site.assessmentWebhook;
+  if (!webhook) return false;
+
+  const url = new URL(webhook);
+  url.searchParams.set("email", email);
+  url.searchParams.set("job", jobKey);
+  const response = await fetch(url);
+  if (!response.ok) return false;
+  const payload = await response.json().catch(() => ({}));
+  return Boolean(payload.already);
 }
 
 module.exports = app;

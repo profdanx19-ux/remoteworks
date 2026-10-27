@@ -1,6 +1,6 @@
 const params = new URLSearchParams(window.location.search);
 const job = params.get("job");
-const duration = 15 * 60;
+const duration = 20 * 60;
 const storageKey = `rsh-assessment-${job}`;
 
 const invalid = document.querySelector("#invalid");
@@ -8,6 +8,10 @@ const intro = document.querySelector("#intro");
 const introTitle = document.querySelector("#intro-title");
 const introCopy = document.querySelector("#intro-copy");
 const startButton = document.querySelector("#start-assessment");
+const emailInput = document.querySelector("#applicant-email");
+const emailError = document.querySelector("#email-error");
+const already = document.querySelector("#already");
+const linkEmail = (params.get("email") || "").trim().toLowerCase();
 const exam = document.querySelector("#exam");
 const results = document.querySelector("#results");
 const title = document.querySelector("#exam-title");
@@ -28,6 +32,7 @@ let startedAt = Date.now();
 let remaining = duration;
 let clock = 0;
 let submitted = false;
+let applicantEmail = linkEmail;
 
 function loadState() {
   try {
@@ -73,9 +78,35 @@ function showResults() {
   intro.hidden = true;
   exam.hidden = true;
   invalid.hidden = true;
+  already.hidden = true;
   results.hidden = false;
   document.title = "Assessment received";
   window.scrollTo({ top: 0, behavior: "instant" });
+}
+
+function showAlready() {
+  submitted = true;
+  window.clearInterval(clock);
+  intro.hidden = true;
+  exam.hidden = true;
+  invalid.hidden = true;
+  results.hidden = true;
+  already.hidden = false;
+  document.title = "Assessment already submitted";
+  window.scrollTo({ top: 0, behavior: "instant" });
+}
+
+function emailLooksValid(value) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+async function alreadySubmitted(email) {
+  const response = await fetch(
+    `/api/assessments/status?job=${encodeURIComponent(job)}&email=${encodeURIComponent(email)}`,
+  );
+  if (!response.ok) return false;
+  const data = await response.json();
+  return Boolean(data.already);
 }
 
 function escapeHtml(value) {
@@ -155,8 +186,13 @@ async function submitExam(fromTimer) {
     const response = await fetch("/api/assessments", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ job, answers }),
+      body: JSON.stringify({ job, email: applicantEmail, answers }),
     });
+    if (response.status === 409) {
+      saveState({ done: true, duplicate: true, email: applicantEmail });
+      showAlready();
+      return;
+    }
     if (!response.ok) throw new Error("save failed");
     const data = await response.json();
     saveState({ done: true, score: data.score, total: data.total });
@@ -172,13 +208,26 @@ async function submitExam(fromTimer) {
   }
 }
 
-function beginExam() {
+async function beginExam() {
   if (clock || submitted) return;
+  const email = (linkEmail || emailInput.value).trim().toLowerCase();
+  if (!emailLooksValid(email)) {
+    emailError.hidden = false;
+    emailInput.focus();
+    return;
+  }
+  emailError.hidden = true;
   startButton.disabled = true;
+  if (await alreadySubmitted(email)) {
+    saveState({ done: true, duplicate: true, email });
+    showAlready();
+    return;
+  }
+  applicantEmail = email;
   intro.hidden = true;
   exam.hidden = false;
   startedAt = Date.now();
-  saveState({ started: true });
+  saveState({ started: true, email: applicantEmail });
   render();
   tick();
   if (remaining <= 0) return;
@@ -204,6 +253,11 @@ async function start() {
   }
 
   const saved = loadState();
+  if (saved?.done && saved.duplicate) {
+    showAlready();
+    return;
+  }
+
   if (saved?.done) {
     showResults();
     return;
@@ -226,7 +280,18 @@ async function start() {
   document.title = heading;
   introCopy.textContent = `This is the skills assessment for the ${payload.role} role. Read the instructions, then start when you are ready.`;
 
-  if (saved?.started) {
+  if (linkEmail) {
+    emailInput.value = linkEmail;
+    emailInput.readOnly = true;
+    if (await alreadySubmitted(linkEmail)) {
+      saveState({ done: true, duplicate: true, email: linkEmail });
+      showAlready();
+      return;
+    }
+  }
+
+  if (saved?.started && saved.email) {
+    applicantEmail = saved.email;
     resumeExam(saved);
     return;
   }
