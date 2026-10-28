@@ -32,7 +32,11 @@ app.use((req, res, next) => {
 });
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(publicDir, "index.html"));
+  res.redirect(302, "/ph");
+});
+
+app.get("/ph", (req, res) => {
+  res.sendFile(path.join(publicDir, "ph.html"));
 });
 
 app.get("/apply", (req, res) => {
