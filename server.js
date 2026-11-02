@@ -32,7 +32,7 @@ app.use((req, res, next) => {
 });
 
 app.get("/", (req, res) => {
-  res.redirect(302, "/ph");
+  res.sendFile(path.join(publicDir, "index.html"));
 });
 
 app.get("/ph", (req, res) => {
