@@ -5,7 +5,7 @@
     }
   },
   "rewrites": [
-    { "source": "/", "destination": "/ph.html" },
+    { "source": "/", "destination": "/index.html" },
     { "source": "/ph", "destination": "/ph.html" },
     { "source": "/apply", "destination": "/apply.html" }
   ]
