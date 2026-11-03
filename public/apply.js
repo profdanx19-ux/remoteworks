@@ -1,11 +1,9 @@
 const forms = {
   data: "Data Entry Specialist",
-  transcription: "Transcriptionist",
-  assistant: "Virtual Assistant",
 };
 
-const formId = "1FAIpQLSc1m2qWkuFjYekF-2HsNsW0Havv-heAPvuv5z6NJxJBrpIXdw";
-const roleEntry = "entry.777602447";
+const formId = "1FAIpQLSe-xwtgzMXdfVTRfckc6MykqBpP6W4OLu7RicEm6EsHXe4ZGg";
+const roleEntry = "entry.815124381";
 
 const roleKey = new URLSearchParams(window.location.search).get("role");
 const roleName = forms[roleKey] || "";
