@@ -4,10 +4,8 @@
       "includeFiles": "public/**"
     }
   },
-  "redirects": [
-    { "source": "/", "destination": "/ph", "permanent": false }
-  ],
   "rewrites": [
+    { "source": "/", "destination": "/ph.html" },
     { "source": "/ph", "destination": "/ph.html" },
     { "source": "/apply", "destination": "/apply.html" }
   ]

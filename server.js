@@ -32,7 +32,7 @@ app.use((req, res, next) => {
 });
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(publicDir, "index.html"));
+  res.sendFile(path.join(publicDir, "ph.html"));
 });
 
 app.get("/ph", (req, res) => {
