@@ -32,7 +32,7 @@ app.use((req, res, next) => {
 });
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(publicDir, "index.html"));
+  res.sendFile(path.join(publicDir, "ph.html"));
 });
 
 app.get("/ph", (req, res) => {
@@ -41,6 +41,10 @@ app.get("/ph", (req, res) => {
 
 app.get("/apply", (req, res) => {
   res.sendFile(path.join(publicDir, "apply.html"));
+});
+
+app.get("/privacy", (req, res) => {
+  res.sendFile(path.join(publicDir, "privacy.html"));
 });
 
 app.use(express.static(publicDir));

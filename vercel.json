@@ -5,8 +5,9 @@
     }
   },
   "rewrites": [
-    { "source": "/", "destination": "/index.html" },
+    { "source": "/", "destination": "/ph.html" },
     { "source": "/ph", "destination": "/ph.html" },
-    { "source": "/apply", "destination": "/apply.html" }
+    { "source": "/apply", "destination": "/apply.html" },
+    { "source": "/privacy", "destination": "/privacy.html" }
   ]
 }
